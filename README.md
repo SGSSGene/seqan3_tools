@@ -21,6 +21,11 @@ Available tools:
     $ st_index_search --dna4 input.dna4.index queries.dna4.fasta results.txt -k 2
     Searches the index for reads provided by the queries file with 2 errors. Results are stored in results.txt
 
+    $ st_fasta_cut --max_chr 2 input.fasta > output.fasta
+    $ st_fasta_cut --max_bases 1000000 input.fasta > output.fasta
+    Reduces the number of bases or chromosons in a fasta file
+
+
 
 Instructions:
 1. clone this repository: `git clone --recurse-submodules https://github.com/SGSSGene/seqan3_tools`

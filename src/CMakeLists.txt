@@ -14,3 +14,6 @@ target_link_libraries (st_index_build PRIVATE seqan3::seqan3)
 
 add_executable (st_index_search st_index_search.cpp)
 target_link_libraries (st_index_search PRIVATE seqan3::seqan3)
+
+add_executable (st_fasta_cut st_fasta_cut.cpp)
+target_link_libraries (st_fasta_cut PRIVATE seqan3::seqan3)
