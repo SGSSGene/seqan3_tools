@@ -16,7 +16,7 @@ struct my_dna5 : seqan3::sequence_file_input_default_traits_dna {
 
 
 template <typename trait>
-void construct_index(std::filesystem::path infile, std::filesystem::path outfile, bool verbose) {
+void construct_index(std::filesystem::path infile, std::filesystem::path outfile, bool verbose, uint64_t maxBases) {
     using alphabet = typename trait::sequence_alphabet;
 
     if (verbose) seqan3::debug_stream << "Loading input file ... " << std::flush;
@@ -26,6 +26,11 @@ void construct_index(std::filesystem::path infile, std::filesystem::path outfile
     for (auto & record : fin) {
         sequences.emplace_back(record.sequence());
         totalSize += sequences.back().size();
+        if (maxBases > 0 and maxBases <= totalSize) {
+            sequences.back().resize(sequences.back().size() - (totalSize - maxBases));
+            totalSize = maxBases;
+            break;
+        }
     }
     if (verbose) seqan3::debug_stream << "done - loaded " << sequences.size() << " sequences, base pairs: " << totalSize << "\n";
 
@@ -61,6 +66,9 @@ int main(int argc, char const* const* argv) {
     parser.add_positional_option(outfile, "output file, Please provide a storage path for the index");
     parser.add_flag(verbose, 'v', "verbose", "Activate verbose output.");
 
+    uint64_t maxBases{0};
+    parser.add_option(maxBases, 'm', "max_bases", "Number of maximum bases to include in the index (0 unlimited)");
+
     bool use_dna4{false};
     parser.add_flag(use_dna4, '\0', "dna4", "Use dna 4 alphabet");
 
@@ -72,9 +80,9 @@ int main(int argc, char const* const* argv) {
         return EXIT_FAILURE;
     }
     if (use_dna4) {
-        construct_index<my_dna4>(infile, outfile, verbose);
+        construct_index<my_dna4>(infile, outfile, verbose, maxBases);
     } else {
-        construct_index<my_dna5>(infile, outfile, verbose);
+        construct_index<my_dna5>(infile, outfile, verbose, maxBases);
     }
 
 
