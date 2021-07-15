@@ -54,7 +54,7 @@ int main(int argc, char const* const* argv) {
     std::filesystem::path outfile;
     bool verbose{false};
 
-    parser.add_positional_option(infile, "Please provide a dna4 fasta file.",
+    parser.add_positional_option(infile, "Please provide a fasta file.",
                                  seqan3::input_file_validator{{"fa", "fasta", "fna"}});
     parser.add_positional_option(outfile, "output file, Please provide a storage path for the index");
     parser.add_flag(verbose, 'v', "verbose", "Activate verbose output.");

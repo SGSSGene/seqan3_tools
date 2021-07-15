@@ -12,9 +12,13 @@ Available tools:
     $ st_dumpfasta input.fasta -d '#' -e '$' > output.txt
     Converts fasta file into a text file, where each sequence is separated by '#' and a '$' is attached at the end
 
-    $ st_index_build --dna4 -v input.dna4.fasta output.dna4.index
     $ st_index_build -v input.dna5.fasta output.dna5.index
+    $ st_index_build --dna4 -v input.dna4.fasta output.dna4.index
     Creates an 2fm-index from a fasta file
+
+    $ st_index_search input.dna5.index queries.dna5.fasta results.txt -k 2
+    $ st_index_search --dna4 input.dna4.index queries.dna4.fasta results.txt -k 2
+    Searches the index for reads provided by the queries file with 2 errors. Results are stored in results.txt
 
 
 Instructions:
