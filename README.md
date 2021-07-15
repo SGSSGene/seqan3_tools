@@ -6,8 +6,12 @@ Available tools:
     $ st_fastq2fasta input.fastq > output.fasta
     Converts a fastq file into a fasta file
 
-    $st_dna5todna4 input.fasta > output.fasta
+    $ st_dna5todna4 input.fasta > output.fasta
     Converts a dna5 alphabet to dna4 and replaces every occurence of 'N' with a random 'A', 'C', 'G' or 'T'.
+
+    $ st_dumpfasta input.fasta -d '#' -e '$' > output.txt
+    Converts fasta file into a text file, where each sequence is separated by '#' and a '$' is attached at the end
+
 
 
 Instructions:
