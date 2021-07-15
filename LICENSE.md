@@ -1,6 +1,6 @@
 BSD 3-Clause License
 
-Copyright (c) 2020, Jörg Winkler
+Copyright (c) 2021, SeqAn-Team
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
