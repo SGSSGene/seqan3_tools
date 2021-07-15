@@ -1,31 +1,24 @@
-#include <sstream>
-
+#include <seqan3/alphabet/nucleotide/dna5.hpp>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
-
-#include <seqan3/alphabet/nucleotide/dna5.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
 #include <seqan3/std/filesystem>
+#include <sstream>
 
-int main(int argc, char ** argv)
-{
-    seqan3::argument_parser parser{"Fastq-to-Fasta-Converter", argc, argv};
+int main(int argc, char const* const* argv) {
+    seqan3::argument_parser parser{"st_fastq2fasta", argc, argv};
 
     std::filesystem::path fastq_file{};
 
-    // Parser
-    parser.info.author = "SeqAn-Team"; // give parser some infos
+    parser.info.author = "SeqAn-Team";
     parser.info.version = "1.0.0";
     parser.add_positional_option(fastq_file, "Please provide a fastq file.",
                                  seqan3::input_file_validator{{"fq","fastq"}});
-    try
-    {
-         parser.parse();                                                  // trigger command line parsing
-    }
-    catch (seqan3::argument_parser_error const & ext)                     // catch user errors
-    {
-        seqan3::debug_stream << "Parsing error. " << ext.what() << "\n"; // give error message
-        return -1;
+    try {
+         parser.parse();
+    } catch (seqan3::argument_parser_error const& ext) {
+        seqan3::debug_stream << "Parsing error. " << ext.what() << "\n";
+        return EXIT_FAILURE;
     }
 
     // conversion
@@ -36,5 +29,5 @@ int main(int argc, char ** argv)
     }
 
 
-    return 0;
+    return EXIT_SUCCESS;
 }
