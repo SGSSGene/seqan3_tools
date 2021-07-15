@@ -3,6 +3,7 @@
 These are simple tools to manipulate sequence data.
 
 Available tools:
+
     $ st_fastq2fasta input.fastq > output.fasta
     Converts a fastq file into a fasta file
 
