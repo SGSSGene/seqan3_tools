@@ -22,10 +22,12 @@ void construct_index(std::filesystem::path infile, std::filesystem::path outfile
     if (verbose) seqan3::debug_stream << "Loading input file ... " << std::flush;
     auto fin  = seqan3::sequence_file_input<trait>{infile};
     auto sequences = std::vector<std::vector<alphabet>>{};
+    uint64_t totalSize{0};
     for (auto & record : fin) {
         sequences.emplace_back(record.sequence());
+        totalSize += sequences.back().size();
     }
-    if (verbose) seqan3::debug_stream << "done - loaded " << sequences.size() << " sequences\n";
+    if (verbose) seqan3::debug_stream << "done - loaded " << sequences.size() << " sequences, base pairs: " << totalSize << "\n";
 
     // creating the index
     if (verbose) seqan3::debug_stream << "Creating 2FM-Index ... " << std::flush;
