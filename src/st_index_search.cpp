@@ -43,7 +43,7 @@ struct my_dna5 : seqan3::sequence_file_input_default_traits_dna {
 
 template <typename trait>
 void search_index(std::filesystem::path indexfile, std::filesystem::path queriesfile, std::filesystem::path resultfile, uint8_t errors) {
-    using alphabet = trait::sequence_alphabet;
+    using alphabet = typename trait::sequence_alphabet;
 
     using Index = decltype(seqan3::bi_fm_index{std::vector<std::vector<alphabet>>{}});
 

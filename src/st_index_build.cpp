@@ -17,7 +17,7 @@ struct my_dna5 : seqan3::sequence_file_input_default_traits_dna {
 
 template <typename trait>
 void construct_index(std::filesystem::path infile, std::filesystem::path outfile, bool verbose) {
-    using alphabet = trait::sequence_alphabet;
+    using alphabet = typename trait::sequence_alphabet;
 
     if (verbose) seqan3::debug_stream << "Loading input file ... " << std::flush;
     auto fin  = seqan3::sequence_file_input<trait>{infile};
