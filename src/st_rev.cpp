@@ -40,6 +40,8 @@ int main(int argc, char const* const* argv) {
 
     auto ifs = std::ifstream{infile, std::ios::binary | std::ios::in};
     auto ofs = std::ofstream{outfile, std::ios::binary | std::ios::out};
+    ofs.seekp(total_size-1);
+    ofs.write("", 1);
 
     auto size = total_size;
     while (size > 1'000'000) {
