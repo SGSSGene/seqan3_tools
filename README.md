@@ -15,6 +15,8 @@ These are simple tools to manipulate sequence data.
     - searches for given queries using an 2FM-Index
   - st_fasta_cut
     - reduces a fasta file to either a certain number of base pairs or a certain number of chromosoms
+  - st_rev
+    - reverses a binary file bytewise without loading the complete file into memory
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta
@@ -37,6 +39,9 @@ These are simple tools to manipulate sequence data.
     $ st_fasta_cut --max_chr 2 input.fasta > output.fasta
     $ st_fasta_cut --max_bases 1000000 input.fasta > output.fasta
     Reduces the number of bases or chromosons in a fasta file
+
+    $ st_rev input.txt output.txt
+    reverses the bytes of input.txt
 
 
 
