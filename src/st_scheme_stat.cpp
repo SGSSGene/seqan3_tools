@@ -1,5 +1,7 @@
 #include "oss/Scheme.h"
 #include "oss/nodeCount.h"
+#include "oss/expand.h"
+
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
@@ -118,6 +120,13 @@ int main(int argc, char const* const* argv) {
     std::filesystem::path input{};
     parser.add_option(input, 'i', "input", "Provide a file with a search scheme");
 
+    int length = 100;
+    parser.add_option(length, 'l', "length", "The pattern length node count assumes (default 100)");
+
+    int sigma = 4;
+    parser.add_option(sigma, 's', "sigma", "The alphabet size node count  assumes (default 4)");
+
+
     try {
          parser.parse();
     } catch (seqan3::argument_parser_error const& ext) {
@@ -150,14 +159,18 @@ int main(int argc, char const* const* argv) {
         }
     });
 
+
+    auto expandedScheme = oss::expand(scheme, length);
+
+
     seqan3::debug_stream << "searches " << scheme.size()
                          << "; parts " << parts
                          << "; min_k " << minK
                          << "; max_k " << maxK
                          << "; feasible " << (failedErrorPatterns.empty()?"true":"false")
                          << "; unique "   << (duplicateErrorPatterns.empty()?"true":"false")
-                         << "; node_count " << oss::nodeCount(scheme, 4)
-                         << "; node_count_edit " << oss::nodeCountEdit(scheme, 4)
+                         << "; node_count " << oss::nodeCount(expandedScheme, sigma)
+                         << "; node_count_edit " << oss::nodeCountEdit(expandedScheme, sigma)
                          << ";\n";
 
 
