@@ -1,16 +1,16 @@
-# SeqAn3 Toolkit (st_*)
+# SeqAn3 Tools (st_*)
 
 These are simple tools to manipulate sequence data.
 
 ## Available tools
-  - st_fastq2fasta  
+  - st_fastq2fasta
     - converts fastq file to fasta file
   - st_dna5todna4
     - converts fasta with dna5 alphabet to dna4 alphabet
   - st_dumpfasta
     - dumps a fasta file into a text file with delimiter inbetween and at the end
   - st_index_build
-    - build a 2FM-Index/Bidirectional FMIndex 
+    - build a 2FM-Index/Bidirectional FMIndex
   - st_index_search
     - searches for given queries using an 2FM-Index
   - st_fasta_cut
