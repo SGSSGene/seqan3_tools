@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.8)
 
+add_subdirectory(oss)
+
 add_executable (st_fastq2fasta st_fastq2fasta.cpp)
 target_link_libraries (st_fastq2fasta PRIVATE seqan3::seqan3)
 
@@ -20,3 +22,6 @@ target_link_libraries (st_fasta_cut PRIVATE seqan3::seqan3)
 
 add_executable (st_binary_rev st_binary_rev.cpp)
 target_link_libraries (st_binary_rev PRIVATE seqan3::seqan3)
+
+add_executable (st_scheme_build st_scheme_build.cpp)
+target_link_libraries (st_scheme_build PRIVATE seqan3::seqan3 generator)
