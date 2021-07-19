@@ -147,7 +147,7 @@ auto h2(int N, int minK, int K) -> Scheme {
         s.l.back() = std::max(s.l.back(), minK);
     }
 
-    assert(isValid(ss));
+//    assert(isValid(ss));
 
     return ss;
 }

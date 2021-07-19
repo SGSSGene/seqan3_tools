@@ -25,3 +25,6 @@ target_link_libraries (st_binary_rev PRIVATE seqan3::seqan3)
 
 add_executable (st_scheme_build st_scheme_build.cpp)
 target_link_libraries (st_scheme_build PRIVATE seqan3::seqan3 generator)
+
+add_executable (st_scheme_stat st_scheme_stat.cpp)
+target_link_libraries (st_scheme_stat PRIVATE seqan3::seqan3 generator)
