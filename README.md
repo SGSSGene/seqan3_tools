@@ -14,9 +14,13 @@ These are simple tools to manipulate sequence data.
   - st_index_search
     - searches for given queries using an 2FM-Index
   - st_fasta_cut
-    - reduces a fasta file to either a certain number of base pairs or a certain number of chromosoms
+    - reduces a fasta file to either a certain number of base pairs or a certain number of chromosomes
   - st_binary_rev
     - reverses a binary file bytewise without loading the complete file into memory
+  - st_scheme_build
+    - constructs a search scheme
+  - st_scheme_stat
+    - prints information about a search scheme
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta
@@ -42,6 +46,12 @@ These are simple tools to manipulate sequence data.
 
     $ st_binary_rev input.txt > output.txt
     reverses the bytes of input.txt
+
+    $ st_scheme_build -g "01*0_opt" -k2 > 01star0_k2.ss
+    constructs a search scheme with two allowed errors, following the optimized 01*0 principle
+
+    $ st_scheme_stat --input 01star0_k2.ss --length 100
+    prints information about a search scheme: number of parts, searches, min/max errors, feasibility, uniqueness, node count, node count for edit distance.
 
 
 
