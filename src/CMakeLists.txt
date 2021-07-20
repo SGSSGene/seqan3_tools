@@ -20,6 +20,9 @@ target_link_libraries (st_index_search PRIVATE seqan3::seqan3)
 add_executable (st_fasta_cut st_fasta_cut.cpp)
 target_link_libraries (st_fasta_cut PRIVATE seqan3::seqan3)
 
+add_executable (st_fasta_info st_fasta_info.cpp)
+target_link_libraries (st_fasta_info PRIVATE seqan3::seqan3)
+
 add_executable (st_binary_rev st_binary_rev.cpp)
 target_link_libraries (st_binary_rev PRIVATE seqan3::seqan3)
 
