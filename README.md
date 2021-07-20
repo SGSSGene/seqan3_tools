@@ -7,8 +7,6 @@ These are simple tools to manipulate sequence data.
     - converts fastq file to fasta file
   - st_dna5todna4
     - converts fasta with dna5 alphabet to dna4 alphabet
-  - st_dumpfasta
-    - dumps a fasta file into a text file with delimiter inbetween and at the end
   - st_index_build
     - build a 2FM-Index/Bidirectional FMIndex
   - st_index_search
@@ -17,8 +15,10 @@ These are simple tools to manipulate sequence data.
     - reduces a fasta file to either a certain number of base pairs or a certain number of chromosomes
   - st_fasta_info
     - prints information about a fasta file
+  - st_fasta_dump
+    - dumps a fasta file into a text file with delimiter in between and at the end
   - st_binary_rev
-    - reverses a binary file bytewise without loading the complete file into memory
+    - reverses a binary file byte-wise without loading the complete file into memory
   - st_scheme_build
     - constructs a search scheme
   - st_scheme_stat
@@ -30,9 +30,6 @@ These are simple tools to manipulate sequence data.
 
     $ st_dna5todna4 input.fasta > output.fasta
     Converts a dna5 alphabet to dna4 and replaces every occurence of 'N' with a random 'A', 'C', 'G' or 'T'.
-
-    $ st_dumpfasta input.fasta -d '#' -e '$' > output.txt
-    Converts fasta file into a text file, where each sequence is separated by '#' and a '$' is attached at the end
 
     $ st_index_build -v input.dna5.fasta output.dna5.index
     $ st_index_build --dna4 -v input.dna4.fasta output.dna4.index
@@ -49,6 +46,9 @@ These are simple tools to manipulate sequence data.
     $ st_fasta_info input.fasta lengths
     $ st_fasta_info input.fasta names
     Prints lengths or names of all fasta file entries
+
+    $ st_fasta_dump input.fasta -d '#' -e '$' > output.txt
+    Converts fasta file into a text file, where each sequence is separated by '#' and a '$' is attached at the end
 
     $ st_binary_rev input.txt > output.txt
     reverses the bytes of input.txt

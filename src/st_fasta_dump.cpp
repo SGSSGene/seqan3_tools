@@ -6,7 +6,7 @@
 #include <sstream>
 
 int main(int argc, char const* const* argv) {
-    seqan3::argument_parser parser{"st_fastadump", argc, argv};
+    seqan3::argument_parser parser{"st_fasta_dump", argc, argv};
 
     std::filesystem::path infile{};
     std::string delimiter{};

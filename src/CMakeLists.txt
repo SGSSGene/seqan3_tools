@@ -8,9 +8,6 @@ target_link_libraries (st_fastq2fasta PRIVATE seqan3::seqan3)
 add_executable (st_dna5todna4 st_dna5todna4.cpp)
 target_link_libraries (st_dna5todna4 PRIVATE seqan3::seqan3)
 
-add_executable (st_fastadump st_fastadump.cpp)
-target_link_libraries (st_fastadump PRIVATE seqan3::seqan3)
-
 add_executable (st_index_build st_index_build.cpp)
 target_link_libraries (st_index_build PRIVATE seqan3::seqan3)
 
@@ -22,6 +19,9 @@ target_link_libraries (st_fasta_cut PRIVATE seqan3::seqan3)
 
 add_executable (st_fasta_info st_fasta_info.cpp)
 target_link_libraries (st_fasta_info PRIVATE seqan3::seqan3)
+
+add_executable (st_fasta_dump st_fasta_dump.cpp)
+target_link_libraries (st_fasta_dump PRIVATE seqan3::seqan3)
 
 add_executable (st_binary_rev st_binary_rev.cpp)
 target_link_libraries (st_binary_rev PRIVATE seqan3::seqan3)
