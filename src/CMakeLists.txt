@@ -31,3 +31,6 @@ target_link_libraries (st_scheme_build PRIVATE seqan3::seqan3 generator)
 
 add_executable (st_scheme_stat st_scheme_stat.cpp)
 target_link_libraries (st_scheme_stat PRIVATE seqan3::seqan3 oss)
+
+add_executable (st_bwt_build st_bwt_build.cpp)
+target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)

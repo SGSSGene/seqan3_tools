@@ -23,6 +23,8 @@ These are simple tools to manipulate sequence data.
     - constructs a search scheme
   - st_scheme_stat
     - prints information about a search scheme
+  - st_bwt_build
+    - constructs a bwt
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta
@@ -58,6 +60,9 @@ These are simple tools to manipulate sequence data.
 
     $ st_scheme_stat --input 01star0_k2.ss --length 100
     prints information about a search scheme: number of parts, searches, min/max errors, feasibility, uniqueness, node count, node count for edit distance.
+
+    $ st_bwt_build --input sometext.txt > bwt.txt
+    constructs the bwt of the given text.
 
 
 
