@@ -23,7 +23,7 @@ void writeFile(std::filesystem::path const& file, std::vector<uint8_t> const& bu
 
 
 int main(int argc, char const* const* argv) {
-    seqan3::argument_parser parser{"st_index_build", argc, argv};
+    seqan3::argument_parser parser{"st_bwt_build", argc, argv};
 
     // Parser
     parser.info.author = "SeqAn-Team";
