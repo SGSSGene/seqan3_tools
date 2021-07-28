@@ -9,6 +9,31 @@
 
 #include <divsufsort64.h>
 
+struct StopWatch {
+    using TP = decltype(std::chrono::steady_clock::now());
+
+    TP start{std::chrono::steady_clock::now()};
+
+    auto now() const -> TP {
+        return std::chrono::steady_clock::now();
+    }
+
+    auto reset() -> double {
+        auto t = now();
+        auto diff = t - start;
+        start = t;
+        return diff.count() / 1'000'000'000.;
+    }
+
+    auto peek() const -> double {
+        auto t = now();
+        auto diff = t - start;
+        return diff.count() / 1'000'000'000.;
+    }
+};
+
+
+
 auto readFile(std::filesystem::path const& file) -> std::vector<uint8_t> {
     auto ifs = std::ifstream{file, std::ios::binary};
     ifs.seekg(0, std::ios::end);
@@ -125,12 +150,22 @@ int main(int argc, char const* const* argv) {
         map[mapping[i]] = i;
     }
 
+    StopWatch stopWatch;
+
     auto data = readFile(infile);
+
+    auto time_read = stopWatch.reset();
+    std::cout << "reading file took " << time_read << "s\n";
+
     if (!mapping.empty()) {
         for (auto& c : data) {
             c = map[c];
         }
     }
+
+    auto time_map = stopWatch.reset();
+    std::cout << "mapping/counting took " << time_map << "s\n";
+
 
     auto sa = std::vector<int64_t>{};
     sa.resize(data.size());
@@ -139,12 +174,24 @@ int main(int argc, char const* const* argv) {
         throw std::runtime_error("some error while creating the suffix array");
     }
 
+    auto time_sa = stopWatch.reset();
+    std::cout << "sa construction took " << time_sa << "s\n";
+
+
     std::vector<uint8_t> bwt;
     bwt.resize(data.size());
     for (size_t i{0}; i < sa.size(); ++i) {
         bwt[i] = data[(sa[i] + data.size()- 1) % data.size()];
     }
+
+    auto time_bwt = stopWatch.reset();
+    std::cout << "bwt took " << time_bwt << "s\n";
+
     writeFile(outfile, bwt);
+
+    auto time_write = stopWatch.reset();
+    std::cout << "writing to file took " << time_write << "s\n";
+
 
     if (csaFile != "") {
         BitStack bits;
@@ -164,7 +211,8 @@ int main(int argc, char const* const* argv) {
         memcpy(buffer.data() + len, csa.data(), csa.size() * 8);
         writeFile(csaFile, buffer);
     }
-
+    auto time_csa = stopWatch.reset();
+    std::cout << "csa construction took " << time_csae << "s\n";
 
     return EXIT_SUCCESS;
 }
