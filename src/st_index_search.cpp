@@ -1,3 +1,5 @@
+#include "oss/generator/all.h"
+
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna4.hpp>
@@ -113,13 +115,33 @@ int main(int argc, char const* const* argv) {
     bool use_dna4{false};
     parser.add_flag(use_dna4, '\0', "dna4", "Use dna 4 alphabet");
 
-
     try {
         parser.parse();
     } catch (seqan3::argument_parser_error const& ext) {
         seqan3::debug_stream << "Parsing error. " << ext.what() << "\n";
         return EXIT_FAILURE;
     }
+    { // This block only really works for error>4 since otherwise the precomupted schemes are being used
+        std::string generatorName = "01*0_opt"; // TODO make this configurable
+        auto iter = oss::generator::all.find(generatorName);
+        if (iter == oss::generator::all.end()) {
+            seqan3::debug_stream << "Unknown generator\n";
+            return EXIT_FAILURE;
+        }
+        auto scheme = iter->second(0, errors, 5, 1'000'000);
+        auto& ss = seqan3::detail::precomputed[{0, errors}];
+        for (auto& s : scheme) {
+            ss.emplace_back();
+            for (size_t i{0}; i < s.pi.size(); ++i) {
+                ss.back().pi.push_back(s.pi[i]);
+                ss.back().l.push_back(s.l[i]);
+                ss.back().u.push_back(s.u[i]);
+            }
+        }
+    }
+
+
+
     if (use_dna4) {
         search_index<my_dna4>(indexfile, queriesfile, outfile, errors);
     } else {
