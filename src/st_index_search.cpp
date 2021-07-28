@@ -1,5 +1,7 @@
 #include "oss/generator/all.h"
 
+#include <seqan3/std/ranges>
+
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna4.hpp>
@@ -8,6 +10,8 @@
 #include <seqan3/io/sequence_file/all.hpp>
 #include <seqan3/search/fm_index/bi_fm_index.hpp>
 #include <seqan3/search/search.hpp>
+#include <seqan3/alphabet/views/complement.hpp>
+#include <seqan3/utility/views/to.hpp>
 
 
 struct StopWatch {
@@ -66,6 +70,12 @@ void search_index(std::filesystem::path indexfile, std::filesystem::path queries
         auto fin = seqan3::sequence_file_input<trait>{queriesfile};
         for (auto & [seq, id, qual] : fin) {
             queries.push_back(seq);
+            queries.push_back(seq
+                | std::views::reverse
+                | seqan3::views::complement
+                | seqan3::views::to<std::vector<alphabet>>
+
+        );
         }
         seqan3::debug_stream << "done - loaded " << queries.size() << " queries, took " << sw.reset() << "s\n";
     }
@@ -87,7 +97,7 @@ void search_index(std::filesystem::path indexfile, std::filesystem::path queries
     seqan3::debug_stream << "found " << result_2.size() << " hits in " << delta << "s which is in avg " << delta / queries.size() * 1'000'000 << "μs per query\n";
     auto ofs = std::ofstream{resultfile};
     for (auto [qid, sid, pos] : result_2) {
-        ofs << qid << " " << sid << " " << pos << "\n";
+        ofs << qid/2 << " " << (qid%2)  << " " << sid << " " << pos << "\n";
     }
     seqan3::debug_stream << "Saved results in " << resultfile << "\n";
 }
@@ -128,7 +138,7 @@ int main(int argc, char const* const* argv) {
             seqan3::debug_stream << "Unknown generator\n";
             return EXIT_FAILURE;
         }
-        auto scheme = iter->second(0, errors, 5, 1'000'000);
+        auto scheme = iter->second(0, errors, 5, 1'000'000'000);
         auto& ss = seqan3::detail::precomputed[{0, errors}];
         for (auto& s : scheme) {
             ss.emplace_back();
