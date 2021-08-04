@@ -1,3 +1,5 @@
+#include "utils/Bitvector.h"
+
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna5.hpp>
@@ -16,10 +18,76 @@ auto readFile(std::filesystem::path const& file) -> std::vector<uint8_t> {
     ifs.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
     return buffer;
 }
+
 void writeFile(std::filesystem::path const& file, std::vector<uint8_t> const& buffer) {
     auto ofs = std::ofstream{file, std::ios::binary};
     ofs.write(reinterpret_cast<char const*>(buffer.data()), buffer.size());
 }
+
+template <typename T>
+void writeFile(std::filesystem::path const& file, std::vector<T> const& buffer) {
+    std::vector<uint8_t> buffer2;
+    buffer2.resize(buffer.size() * sizeof(T));
+    memcpy(buffer2.data(), buffer.data(), buffer2.size());
+    writeFile(file, buffer);
+}
+struct BitStack {
+    uint64_t size{0};
+    uint64_t ones{0};
+    std::vector<uint8_t> data;
+    void push(bool bit) {
+        if (size % 8 == 0) {
+            data.push_back(0);
+        }
+        data.back() = data.back() | (bit << (size % 8));
+        size += 1;
+        if (bit) {
+            ones += 1;
+        }
+    }
+
+    bool value(size_t idx) const {
+        auto block  = idx / 8;
+        auto bitNbr = idx % 8;
+        return (data[block] & (1ul << bitNbr));
+    }
+
+    void append(std::vector<uint8_t>& buffer) const {
+        buffer.reserve(buffer.size() + 16 + data.size());
+        {
+            buffer.resize(buffer.size() + 8);
+            memcpy(buffer.data() + buffer.size() - 8, &size, sizeof(size));
+        }
+        {
+            buffer.resize(buffer.size() + 8);
+            memcpy(buffer.data() + buffer.size() - 8, &ones, sizeof(ones));
+        }
+
+        for (auto e : data) {
+            buffer.push_back(e);
+        }
+        if (data.size() % 8 > 0) {
+            for (size_t i{data.size() % 8}; i < 8; ++i) {
+                buffer.push_back(0);
+            }
+        }
+    }
+
+
+    size_t read(uint8_t const* buffer, size_t len) {
+        assert(len >= 16);
+
+        memcpy(&size, buffer, 8); buffer += 8;
+        memcpy(&ones, buffer, 8); buffer += 8;
+
+        data.resize(size / 8 + (((size % 8) > 0)?1:0));
+        memcpy(data.data(), buffer, data.size());
+        if (data.size() % 8 > 0) {
+            return 16 + data.size() + (8-(data.size() % 8));
+        }
+        return 16 + data.size();
+    }
+};
 
 
 int main(int argc, char const* const* argv) {
@@ -37,6 +105,12 @@ int main(int argc, char const* const* argv) {
     parser.add_positional_option(outfile, "Please provdie a output file.");
 
     parser.add_option(mapping,  'm', "map", "Add a mapping e.g.: \"$ACGT\"");
+
+    std::filesystem::path csaFile;
+    uint64_t csaRate{1};
+
+    parser.add_option(csaFile, 'a', "csa_file", "suffix array file");
+    parser.add_option(csaRate, 'b', "csa_rate", "compression rate");
 
 
     try {
@@ -71,6 +145,25 @@ int main(int argc, char const* const* argv) {
         bwt[i] = data[(sa[i] + data.size()- 1) % data.size()];
     }
     writeFile(outfile, bwt);
+
+    if (csaFile != "") {
+        BitStack bits;
+        std::vector<uint64_t> csa;
+        for (auto e : sa) {
+            if (e % csaRate == 0) {
+                bits.push(1);
+                csa.push_back(e);
+            } else {
+                bits.push(0);
+            }
+        }
+        std::vector<uint8_t> buffer;
+        bits.append(buffer);
+        auto len = buffer.size();
+        buffer.resize(buffer.size() + csa.size() * 8);
+        memcpy(buffer.data() + len, csa.data(), csa.size() * 8);
+        writeFile(csaFile, buffer);
+    }
 
 
     return EXIT_SUCCESS;
