@@ -212,7 +212,7 @@ int main(int argc, char const* const* argv) {
         writeFile(csaFile, buffer);
     }
     auto time_csa = stopWatch.reset();
-    std::cout << "csa construction took " << time_csae << "s\n";
+    std::cout << "csa construction took " << time_csa << "s\n";
 
     return EXIT_SUCCESS;
 }
