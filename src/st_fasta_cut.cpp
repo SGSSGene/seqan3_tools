@@ -33,6 +33,7 @@ int main(int argc, char const* const* argv) {
 
     seqan3::sequence_file_input fin{infile};
     seqan3::sequence_file_output fout{std::cout, seqan3::format_fasta{}};
+    fout.options.fasta_blank_before_id = false;
     uint64_t ctBases{0};
     uint64_t ctChr{0};
 
