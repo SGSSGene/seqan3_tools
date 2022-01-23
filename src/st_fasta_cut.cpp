@@ -21,6 +21,8 @@ int main(int argc, char const* const* argv) {
     uint64_t maxChr = std::numeric_limits<uint64_t>::max();
     parser.add_option(maxChr, 'c', "max_chr", "max number of chromosoms");
 
+    uint64_t maxBasesPerLine = std::numeric_limits<uint64_t>::max();
+    parser.add_option(maxBasesPerLine, '\0', "max_bases_per_line", "maximum bases per enrty");
 
 
     try {
@@ -48,6 +50,9 @@ int main(int argc, char const* const* argv) {
         if (ctBases > maxBases) {
             seq.resize(seq.size() - (ctBases - maxBases));
             ctBases = maxBases;
+        }
+        if (seq.size() > maxBasesPerLine) {
+            seq.resize(maxBasesPerLine);
         }
         fout.emplace_back(seq, record.id());
     }
