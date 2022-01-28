@@ -21,6 +21,10 @@ int main(int argc, char const* const* argv) {
     uint64_t maxChr = std::numeric_limits<uint64_t>::max();
     parser.add_option(maxChr, 'c', "max_chr", "max number of chromosoms");
 
+    uint64_t skipChr{};
+    parser.add_option(skipChr, 's', "skip_chr", "skip the first chr");
+
+
     uint64_t maxBasesPerLine = std::numeric_limits<uint64_t>::max();
     parser.add_option(maxBasesPerLine, '\0', "max_bases_per_line", "maximum bases per enrty");
 
@@ -41,6 +45,10 @@ int main(int argc, char const* const* argv) {
 
     // iterate through all sequences in input file
     for (auto & record : fin) {
+        if (skipChr > 0) {
+            skipChr -= 1;
+            continue;
+        }
         if (ctChr == maxChr) break;
         if (ctBases == maxBases) break;
 
