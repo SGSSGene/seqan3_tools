@@ -18,7 +18,7 @@ void printBlock(std::ifstream& ifs, size_t end, int blockSize) {
 
 
 int main(int argc, char const* const* argv) {
-    seqan3::argument_parser parser{"st_rev", argc, argv};
+    seqan3::argument_parser parser{"st_binary_rev", argc, argv};
 
     std::filesystem::path infile{};
 
