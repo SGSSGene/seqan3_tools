@@ -24,9 +24,11 @@ int main(int argc, char const* const* argv) {
     uint64_t skipChr{};
     parser.add_option(skipChr, 's', "skip_chr", "skip the first chr");
 
-
     uint64_t maxBasesPerLine = std::numeric_limits<uint64_t>::max();
-    parser.add_option(maxBasesPerLine, '\0', "max_bases_per_line", "maximum bases per enrty");
+    parser.add_option(maxBasesPerLine, '\0', "max_bases_per_line", "resizes lines to maximum bases");
+
+    uint64_t minBasesPerLine = 0;
+    parser.add_option(minBasesPerLine, '\0', "min_bases_per_line", "skips lines with less entries");
 
 
     try {
@@ -53,6 +55,8 @@ int main(int argc, char const* const* argv) {
         if (ctBases == maxBases) break;
 
         auto seq = std::vector<seqan3::dna5>{record.sequence()};
+        if (seq.size() < minBasesPerLine) continue;
+
         ctBases += seq.size();
         ctChr += 1;
         if (ctBases > maxBases) {
