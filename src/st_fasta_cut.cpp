@@ -60,6 +60,7 @@ int main(int argc, char const* const* argv) {
             ctBases = maxBases;
         }
         if (seq.size() > maxBasesPerLine) {
+            ctBases -= (seq.size() - maxBasesPerLine);
             seq.resize(maxBasesPerLine);
         }
         fout.emplace_back(seq, record.id());
