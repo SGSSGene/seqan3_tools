@@ -1,8 +1,8 @@
+#include <filesystem>
+#include <fstream>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
-#include <seqan3/std/filesystem>
 #include <sstream>
-#include <fstream>
 
 void printBlock(std::ifstream& ifs, size_t end, int blockSize) {
     if (blockSize == 0) {

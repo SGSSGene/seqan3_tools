@@ -1,18 +1,16 @@
 #include "oss/generator/all.h"
 
-#include <seqan3/std/ranges>
-
+#include <ranges>
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna4.hpp>
+#include <seqan3/alphabet/views/complement.hpp>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
 #include <seqan3/search/fm_index/bi_fm_index.hpp>
 #include <seqan3/search/search.hpp>
-#include <seqan3/alphabet/views/complement.hpp>
-#include <seqan3/utility/views/to.hpp>
-
+#include <seqan3/utility/range/to.hpp>
 
 struct StopWatch {
     using TP = decltype(std::chrono::steady_clock::now());
@@ -73,7 +71,7 @@ void search_index(std::filesystem::path indexfile, std::filesystem::path queries
             queries.push_back(seq
                 | std::views::reverse
                 | seqan3::views::complement
-                | seqan3::views::to<std::vector<alphabet>>
+                | seqan3::ranges::to<std::vector<alphabet>>()
 
         );
         }
@@ -131,24 +129,24 @@ int main(int argc, char const* const* argv) {
         seqan3::debug_stream << "Parsing error. " << ext.what() << "\n";
         return EXIT_FAILURE;
     }
-    { // This block only really works for error>4 since otherwise the precomupted schemes are being used
-        std::string generatorName = "01*0_opt"; // TODO make this configurable
-        auto iter = oss::generator::all.find(generatorName);
-        if (iter == oss::generator::all.end()) {
-            seqan3::debug_stream << "Unknown generator\n";
-            return EXIT_FAILURE;
-        }
-        auto scheme = iter->second(0, errors, 5, 1'000'000'000);
-        auto& ss = seqan3::detail::precomputed[{0, errors}];
-        for (auto& s : scheme) {
-            ss.emplace_back();
-            for (size_t i{0}; i < s.pi.size(); ++i) {
-                ss.back().pi.push_back(s.pi[i]);
-                ss.back().l.push_back(s.l[i]);
-                ss.back().u.push_back(s.u[i]);
-            }
-        }
-    }
+    //{ // This block only really works for error>4 since otherwise the precomupted schemes are being used
+    //    std::string generatorName = "01*0_opt"; // TODO make this configurable
+    //    auto iter = oss::generator::all.find(generatorName);
+    //    if (iter == oss::generator::all.end()) {
+    //        seqan3::debug_stream << "Unknown generator\n";
+    //        return EXIT_FAILURE;
+    //    }
+    //    auto scheme = iter->second(0, errors, 5, 1'000'000'000);
+    //    auto& ss = seqan3::detail::precomputed[{0, errors}];
+    //    for (auto& s : scheme) {
+    //        ss.emplace_back();
+    //        for (size_t i{0}; i < s.pi.size(); ++i) {
+    //            ss.back().pi.push_back(s.pi[i]);
+    //            ss.back().l.push_back(s.l[i]);
+    //            ss.back().u.push_back(s.u[i]);
+    //        }
+    //    }
+    //}
 
 
 

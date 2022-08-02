@@ -2,10 +2,10 @@
 #include "oss/nodeCount.h"
 #include "oss/expand.h"
 
+#include <filesystem>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
-#include <seqan3/std/filesystem>
 #include <sstream>
 
 auto readList(std::string_view line) -> std::vector<int> {

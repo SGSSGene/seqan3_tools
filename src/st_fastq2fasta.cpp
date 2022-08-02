@@ -1,8 +1,8 @@
+#include <filesystem>
 #include <seqan3/alphabet/nucleotide/dna5.hpp>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
-#include <seqan3/std/filesystem>
 #include <sstream>
 
 int main(int argc, char const* const* argv) {
@@ -13,7 +13,7 @@ int main(int argc, char const* const* argv) {
     parser.info.author = "SeqAn-Team";
     parser.info.version = "1.0.0";
     parser.add_positional_option(fastq_file, "Please provide a fastq file.",
-                                 seqan3::input_file_validator{{"fq","fastq"}});
+                                 seqan3::input_file_validator{{"fq","fastq", "fa"}});
     try {
          parser.parse();
     } catch (seqan3::argument_parser_error const& ext) {

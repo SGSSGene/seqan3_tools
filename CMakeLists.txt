@@ -27,10 +27,6 @@ set (FontReset "${Esc}[m")
 # Dependency: SeqAn3.
 find_package (SeqAn3 QUIET REQUIRED HINTS lib/seqan3/build_system)
 
-# Use ccache.
-include ("${SEQAN3_CLONE_DIR}/test/cmake/seqan3_require_ccache.cmake")
-seqan3_require_ccache ()
-
 # Add the application.
 add_subdirectory (src)
 message (STATUS "${FontBold}You can run `make` to build the application.${FontReset}")

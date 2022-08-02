@@ -1,9 +1,9 @@
 #include "oss/generator/all.h"
 
+#include <filesystem>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sequence_file/all.hpp>
-#include <seqan3/std/filesystem>
 #include <sstream>
 
 inline auto allGeneratorNames = []() -> std::string {
