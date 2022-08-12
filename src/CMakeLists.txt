@@ -37,3 +37,9 @@ target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)
 
 add_executable (st_text_map st_text_map.cpp)
 target_link_libraries (st_text_map PRIVATE seqan3::seqan3)
+
+add_executable (st_multistring_filter st_multistring_filter.cpp)
+target_link_libraries (st_multistring_filter PRIVATE seqan3::seqan3)
+
+add_executable (st_name_id_mapper st_name_id_mapper.cpp)
+target_link_libraries (st_name_id_mapper PRIVATE seqan3::seqan3)

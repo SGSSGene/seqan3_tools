@@ -25,6 +25,11 @@ These are simple tools to manipulate sequence data.
     - prints information about a search scheme
   - st_bwt_build
     - constructs a bwt
+  - st_multistring_filter
+    - maps indices that can't handle multistring indices, from a single concatenated string back to
+      multi strings
+  - st_name_id_mapper
+    - maps sequence names to ids, or vice versa
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta
