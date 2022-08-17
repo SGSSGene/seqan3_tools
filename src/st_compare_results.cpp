@@ -21,12 +21,20 @@ struct Reader {
 
 private:
     void readEntry() {
-        size_t qid, sid, spos;
+    std::string line;
+    if (!std::getline(ifs, line)) return;
 
-        ifs >> qid; if (ifs.eof()) return;
-        ifs >> sid; if (ifs.eof()) return;
-        ifs >> spos; if (ifs.eof()) return;
+    auto s1 = line.find(' ');
+    auto s2 = line.find(' ', s1+1);
+
+    try {
+        auto qid  = std::stod(line.substr(0, s1));
+        auto sid  = std::stod(line.substr(s1, s2));
+        auto spos = std::stod(line.substr(s2));
         entries[qid][sid].insert(spos);
+    } catch(std::exception const& e) {
+        std::cerr << "ignoring: " << line << "\n";
+    }
     }
 };
 
@@ -60,6 +68,8 @@ int main(int argc, char const* const* argv) {
 
     auto lhs = Reader(lhs_file);
     auto rhs = Reader(rhs_file);
+
+    std::cerr << "done reading\n" << std::flush;
 
     auto compare = [error](auto const& lhs, auto const& rhs, char symb) {
         for (auto const& [qidx, l] : lhs.entries) {
