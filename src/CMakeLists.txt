@@ -46,3 +46,6 @@ target_link_libraries (st_name_id_mapper PRIVATE seqan3::seqan3)
 
 add_executable (st_compare_results st_compare_results.cpp)
 target_link_libraries (st_compare_results PRIVATE seqan3::seqan3)
+
+add_executable (st_sam_filter st_sam_filter.cpp)
+target_link_libraries (st_sam_filter PRIVATE seqan3::seqan3)
