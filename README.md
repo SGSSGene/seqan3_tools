@@ -30,6 +30,10 @@ These are simple tools to manipulate sequence data.
       multi strings
   - st_name_id_mapper
     - maps sequence names to ids, or vice versa
+  - st_sam_filter
+    - filters sam files by number of errors
+  - st_sam_info
+    - some infos about the sam file that no one else reports
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta
