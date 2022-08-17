@@ -21,7 +21,10 @@ int main(int argc, char const* const* argv) {
     parser.add_positional_option(out_file, "output");
 
     size_t error = 0;
-    parser.add_option(error, '\0', "error", "exact number of allowed errors");
+    parser.add_option(error, '\0', "error", "max number of allowed errors");
+
+    size_t minErrors = 0;
+    parser.add_option(minErrors, '\0', "minError", "min number of occured errors");
 
     try {
          parser.parse();
@@ -41,7 +44,7 @@ int main(int argc, char const* const* argv) {
                 countErrors += 1;
             }
         }
-        if (countErrors == error) {
+        if (minErrors <= countErrors && countErrors <= error) {
             fout.push_back(record);
         }
     }
