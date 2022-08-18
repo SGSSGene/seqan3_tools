@@ -35,6 +35,10 @@ int main(int argc, char const* const* argv) {
     bool noDeletions{false};
     parser.add_flag(noDeletions, '\0', "noDeletions", "filter out all alignments with Deletions");
 
+    size_t maxNum{std::numeric_limits<size_t>::max()};
+    parser.add_option(maxNum, '\0', "num", "number of alignments to pass through");
+
+
 
     try {
          parser.parse();
@@ -47,6 +51,7 @@ int main(int argc, char const* const* argv) {
     auto fin  = seqan3::sam_file_input{in_file};
     auto fout = seqan3::sam_file_output{out_file};
 
+    size_t count{};
     for (auto & record : fin) {
         size_t countErrors{};
         size_t countMismatches{};
@@ -68,9 +73,10 @@ int main(int argc, char const* const* argv) {
             && (!noMismatches || countMismatches == 0)
             && (!noInsertions || countInsertions == 0)
             && (!noDeletions  || countDeletions == 0)) {
-
+            count += 1;
             fout.push_back(record);
         }
+        if (count == maxNum) break;
     }
 
     return EXIT_SUCCESS;
