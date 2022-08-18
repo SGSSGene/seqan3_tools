@@ -29,18 +29,30 @@ int main(int argc, char const* const* argv) {
 
     auto map = std::map<size_t, size_t>{};
 
+    auto cigarCt = std::unordered_map<char, size_t>{};
+
+    size_t seqCt{};
+    size_t charCt{};
     for (auto & record : fin) {
+        seqCt += 1;
         size_t countErrors{};
         for (auto [ct, op] : record.cigar_sequence()) {
             if (op.to_char() != 'M' && op.to_char() != '=') {
-                countErrors += 1;
+                countErrors += ct;
             }
+            charCt += ct;
+            cigarCt[op.to_char()] += ct;
         }
         map[countErrors] += 1;
     }
 
+    std::cout << "by error count:\n";
     for (auto [error, count] : map) {
         std::cout << count << " reads with " << error << " errors" << "\n";
+    }
+    std::cout << "\nby type\n";
+    for (auto [c, ct] : cigarCt) {
+        std::cout << c << " occurred " << ct << " times, that is " << 1.0*ct/seqCt << " per read or " << 1.0*ct/charCt << " per base\n";
     }
 
     return EXIT_SUCCESS;
