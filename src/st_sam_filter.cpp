@@ -41,7 +41,7 @@ int main(int argc, char const* const* argv) {
         size_t countErrors{};
         for (auto [ct, op] : record.cigar_sequence()) {
             if (op.to_char() != 'M' && op.to_char() != '=') {
-                countErrors += 1;
+                countErrors += ct;
             }
         }
         if (minErrors <= countErrors && countErrors <= error) {
