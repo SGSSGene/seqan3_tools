@@ -26,6 +26,16 @@ int main(int argc, char const* const* argv) {
     size_t minErrors = 0;
     parser.add_option(minErrors, '\0', "minError", "min number of occured errors");
 
+    bool noMismatches{false};
+    parser.add_flag(noMismatches, '\0', "noMismatches", "filter out all alignments with mismatches");
+
+    bool noInsertions{false};
+    parser.add_flag(noInsertions, '\0', "noInsertions", "filter out all alignments with insertions");
+
+    bool noDeletions{false};
+    parser.add_flag(noDeletions, '\0', "noDeletions", "filter out all alignments with Deletions");
+
+
     try {
          parser.parse();
     } catch (seqan3::argument_parser_error const& ext) {
@@ -39,12 +49,26 @@ int main(int argc, char const* const* argv) {
 
     for (auto & record : fin) {
         size_t countErrors{};
+        size_t countMismatches{};
+        size_t countInsertions{};
+        size_t countDeletions{};
         for (auto [ct, op] : record.cigar_sequence()) {
             if (op.to_char() != 'M' && op.to_char() != '=') {
                 countErrors += ct;
             }
+            if (op.to_char() == 'X') {
+                countMismatches += ct;
+            } else if (op.to_char() == 'I') {
+                countInsertions += ct;
+            } else if (op.to_char() == 'D') {
+                countDeletions += ct;
+            }
         }
-        if (minErrors <= countErrors && countErrors <= error) {
+        if (minErrors <= countErrors && countErrors <= error
+            && (!noMismatches || countMismatches == 0)
+            && (!noInsertions || countInsertions == 0)
+            && (!noDeletions  || countDeletions == 0)) {
+
             fout.push_back(record);
         }
     }
