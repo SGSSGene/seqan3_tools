@@ -34,6 +34,8 @@ These are simple tools to manipulate sequence data.
     - filters sam files by number of errors
   - st_sam_info
     - some infos about the sam file that no one else reports
+  - st_local_mapper
+    - convert output from programs like 'columba' to sam/bam format
 
 ## Usage
     $ st_fastq2fasta input.fastq > output.fasta

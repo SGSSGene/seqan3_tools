@@ -52,3 +52,6 @@ target_link_libraries (st_sam_filter PRIVATE seqan3::seqan3)
 
 add_executable (st_sam_info st_sam_info.cpp)
 target_link_libraries (st_sam_info PRIVATE seqan3::seqan3)
+
+add_executable (st_local_mapper st_local_mapper.cpp)
+target_link_libraries (st_local_mapper PRIVATE seqan3::seqan3)
