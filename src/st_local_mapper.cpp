@@ -6,7 +6,7 @@
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna4.hpp>
-#include <seqan3/alphabet/views/complement.hpp>
+#include <seqan3/alphabet/views/all.hpp>
 #include <seqan3/argument_parser/all.hpp>
 #include <seqan3/core/debug_stream.hpp>
 #include <seqan3/io/sam_file/output.hpp>
@@ -65,6 +65,9 @@ int main(int argc, char const* const* argv) {
     uint8_t errors{0};
     parser.add_option(errors, 'k', "errors", "Number of allowed errors.");
 
+    bool reverseQueries{};
+    parser.add_flag(reverseQueries, '\0', "reverse_queries", "Assumes every second query is a reverse complement query");
+
 
     try {
         parser.parse();
@@ -81,8 +84,12 @@ int main(int argc, char const* const* argv) {
 
     auto pos     = readPosition(positionFile);
 
-    auto listRefs = refs | std::views::transform([](auto const& t) { return std::get<0>(t); });
-    auto listRefLen = refs | std::views::transform([](auto const& t) { return std::get<1>(t).size(); });
+    auto listRefs = std::vector<std::string>{};
+    auto listRefLen = std::vector<size_t>{};
+    for (auto [id, seq] : refs) {
+        listRefs.push_back(id);
+        listRefLen.push_back(seq.size());
+    }
 
     auto sam_out = seqan3::sam_file_output{outFile,
                                     listRefs,
@@ -92,6 +99,7 @@ int main(int argc, char const* const* argv) {
                                                    seqan3::field::ref_id,
                                                    seqan3::field::ref_offset,
                                                    seqan3::field::alignment,
+                                                   seqan3::field::flag,
                                                    seqan3::field::mapq>{}};
 
     for (auto [qid, sid, spos] : pos) {
@@ -100,7 +108,18 @@ int main(int argc, char const* const* argv) {
             startPos = spos - errors;
         }
         auto const& [ref_id, ref_seq] = refs[sid];
-        auto const& [q_id, q_seq] = queries[qid];
+        auto [q_id, q_seq] = [&]() {
+            if (reverseQueries) {
+                return queries[qid/2];
+            }
+            return queries[qid];
+        }();
+
+        seqan3::sam_flag flag{};
+        if (reverseQueries && qid % 2 == 1) {
+            q_seq = q_seq | std::views::reverse | seqan3::views::complement | seqan3::ranges::to<std::vector>();
+            flag = seqan3::sam_flag::on_reverse_strand;
+        }
         auto rhs = q_seq;
         auto endPos = std::min(ref_seq.size(), spos + rhs.size() + errors);
         auto lhs = std::vector(ref_seq.begin()+startPos, ref_seq.begin()+endPos);
@@ -111,15 +130,17 @@ int main(int argc, char const* const* argv) {
             seqan3::align_cfg::free_end_gaps_sequence2_leading{false},
             seqan3::align_cfg::free_end_gaps_sequence1_trailing{true},
             seqan3::align_cfg::free_end_gaps_sequence2_trailing{false},
-        } |  seqan3::align_cfg::edit_scheme;
+        } |  seqan3::align_cfg::edit_scheme | seqan3::align_cfg::min_score{-errors};
         auto results = seqan3::align_pairwise(std::tie(lhs, rhs), config);
+        size_t i = 0;
         for (auto res : results) {
-            seqan3::debug_stream << lhs << " " << rhs << " " << res.alignment() << " " << res.score() << "\n";
+            seqan3::debug_stream << ++i << " " << q_id << " " <<  qid << " " << sid << " " << spos << " " << lhs << " " << rhs << " " << res.alignment() << " " << res.score() << "\n";
             sam_out.emplace_back(rhs,
                                  q_id,
                                  ref_id,
                                  spos,
                                  res.alignment(),
+                                 flag,
                                  60u + res.score());
         }
     }
