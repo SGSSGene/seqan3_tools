@@ -35,9 +35,16 @@ auto readPosition(std::filesystem::path p) {
         if (p0 == std::string::npos) continue;
         auto p1 = line.find(' ', p0+1);
         if (p1 == std::string::npos) continue;
-        auto v0 = std::stod(line.substr(0, p0));
-        auto v1 = std::stod(line.substr(p0+1, p1));
-        auto v2 = std::stod(line.substr(p1+1));
+        auto s0 = line.substr(0, p0);
+        auto s1 = line.substr(p0+1, p1);
+        auto s2 = line.substr(p1+1);
+
+	if (s0 == "_" || s1 == "_" || s2 == "_") continue;
+
+        auto v0 = std::stod(s0);
+        auto v1 = std::stod(s1);
+        auto v2 = std::stod(s2);
+
         pos.emplace_back(v0, v1, v2);
     }
 
