@@ -39,7 +39,7 @@ auto readPosition(std::filesystem::path p) {
         auto s1 = line.substr(p0+1, p1);
         auto s2 = line.substr(p1+1);
 
-	if (s0 == "_" || s1 == "_" || s2 == "_") continue;
+        if (s0 == "_" || s1 == "_" || s2 == "_") continue;
 
         auto v0 = std::stod(s0);
         auto v1 = std::stod(s1);

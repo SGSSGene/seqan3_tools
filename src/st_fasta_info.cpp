@@ -21,8 +21,10 @@ int main(int argc, char const* const* argv) {
 
     size_t queryId{}, pos{}, len{100};
     bool revCompl{false};
+    std::string qname{};
 
     parser.add_option(queryId, '\0', "id",        "(view) number of query");
+    parser.add_option(qname,   '\0', "qname",     "(view) name of sequence (if this is set, id will be ignored)");
     parser.add_option(pos,     '\0', "start",     "(view) position where to start printing");
     parser.add_option(len,     '\0', "len",       "(view) how many chars to print");
     parser.add_flag(revCompl,  '\0', "rev-compl", "(view) consider artifical revComple (uneven numbers are artifical)");
@@ -48,8 +50,12 @@ int main(int argc, char const* const* argv) {
     } else if (mode == "view") {
         size_t i{};
         for (auto & record : fin) {
-            if (!revCompl) if (i++ != queryId) continue;
-            if (revCompl) if (i != queryId and i+1 != queryId) { i+=2; continue; }
+            if (qname.empty()) {
+                if (!revCompl) if (i++ != queryId) continue;
+                if (revCompl) if (i != queryId and i+1 != queryId) { i+=2; continue; }
+            } else {
+                if (record.id() != qname) continue;
+            }
 
             auto seq = record.sequence();
             if (revCompl and (queryId%2 != 0)) {
