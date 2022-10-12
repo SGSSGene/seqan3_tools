@@ -32,8 +32,10 @@ target_link_libraries (st_scheme_build PRIVATE seqan3::seqan3 generator)
 add_executable (st_scheme_stat st_scheme_stat.cpp)
 target_link_libraries (st_scheme_stat PRIVATE seqan3::seqan3 oss)
 
-add_executable (st_bwt_build st_bwt_build.cpp)
-target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)
+if(NOT NODIVSUFSORT)
+    add_executable (st_bwt_build st_bwt_build.cpp)
+    target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)
+endif()
 
 add_executable (st_text_map st_text_map.cpp)
 target_link_libraries (st_text_map PRIVATE seqan3::seqan3)
