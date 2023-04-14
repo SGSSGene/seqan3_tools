@@ -145,16 +145,16 @@ int main(int argc, char const* const* argv) {
             using namespace seqan3::literals;
             auto cigar = seqan3::cigar_from_alignment(res.alignment(), {}, true);
             { // replace I at the beginning with substitutions
-                auto& [cigar_ct, cigar_op] = cigar.front();
+                auto [cigar_ct, cigar_op] = cigar.front();
                 if (cigar_op == 'I'_cigar_operation) {
-                    cigar_op = 'X'_cigar_operation;
+                    cigar.front() = seqan3::cigar{cigar_ct, 'X'_cigar_operation};
                     spos -= cigar_ct;
                 }
             }
             { // replace I at the end with substitutions
-                auto& [cigar_ct, cigar_op] = cigar.back();
+                auto [cigar_ct, cigar_op] = cigar.back();
                 if (cigar_op == 'I'_cigar_operation) {
-                    cigar_op = 'X'_cigar_operation;
+                    cigar.back() = seqan3::cigar{cigar_ct, 'X'_cigar_operation};
                 }
             }
             seqan3::debug_stream << ++i << " " << q_id << " " <<  qid << " " << sid << " " << spos << " " << lhs << " " << rhs << " " << cigar << " " << res.score() << "\n";
