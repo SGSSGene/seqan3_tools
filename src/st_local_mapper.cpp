@@ -3,6 +3,7 @@
 
 #include <seqan3/alignment/configuration/all.hpp>
 #include <seqan3/alignment/pairwise/align_pairwise.hpp>
+#include <seqan3/alignment/cigar_conversion/cigar_from_alignment.hpp>
 #include <seqan3/alphabet/adaptation/char.hpp>
 #include <seqan3/alphabet/concept.hpp>
 #include <seqan3/alphabet/nucleotide/dna4.hpp>
@@ -105,7 +106,7 @@ int main(int argc, char const* const* argv) {
                                                    seqan3::field::id,
                                                    seqan3::field::ref_id,
                                                    seqan3::field::ref_offset,
-                                                   seqan3::field::alignment,
+                                                   seqan3::field::cigar,
                                                    seqan3::field::flag,
                                                    seqan3::field::mapq>{}};
 
@@ -141,12 +142,27 @@ int main(int argc, char const* const* argv) {
         auto results = seqan3::align_pairwise(std::tie(lhs, rhs), config);
         size_t i = 0;
         for (auto res : results) {
-            seqan3::debug_stream << ++i << " " << q_id << " " <<  qid << " " << sid << " " << spos << " " << lhs << " " << rhs << " " << res.alignment() << " " << res.score() << "\n";
+            using namespace seqan3::literals;
+            auto cigar = seqan3::cigar_from_alignment(res.alignment(), {}, true);
+            { // replace I at the beginning with substitutions
+                auto& [cigar_ct, cigar_op] = cigar.front();
+                if (cigar_op == 'I'_cigar_operation) {
+                    cigar_op = 'X'_cigar_operation;
+                    spos -= cigar_ct;
+                }
+            }
+            { // replace I at the end with substitutions
+                auto& [cigar_ct, cigar_op] = cigar.back();
+                if (cigar_op == 'I'_cigar_operation) {
+                    cigar_op = 'X'_cigar_operation;
+                }
+            }
+            seqan3::debug_stream << ++i << " " << q_id << " " <<  qid << " " << sid << " " << spos << " " << lhs << " " << rhs << " " << cigar << " " << res.score() << "\n";
             sam_out.emplace_back(rhs,
                                  q_id,
                                  ref_id,
                                  spos,
-                                 res.alignment(),
+                                 cigar,
                                  flag,
                                  60u + res.score());
         }
