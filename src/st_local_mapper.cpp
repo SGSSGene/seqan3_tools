@@ -95,6 +95,8 @@ int main(int argc, char const* const* argv) {
     auto listRefs = std::vector<std::string>{};
     auto listRefLen = std::vector<size_t>{};
     for (auto [id, seq] : refs) {
+        id = id.substr(0, id.find(' '));
+
         listRefs.push_back(id);
         listRefLen.push_back(seq.size());
     }
@@ -115,7 +117,8 @@ int main(int argc, char const* const* argv) {
         if (spos > errors) {
             startPos = spos - errors;
         }
-        auto const& [ref_id, ref_seq] = refs[sid];
+        auto [ref_id, ref_seq] = refs[sid];
+        ref_id = ref_id.substr(0, ref_id.find(' '));
         auto [q_id, q_seq] = [&]() {
             if (reverseQueries) {
                 return queries[qid/2];
