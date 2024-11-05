@@ -1,3 +1,4 @@
+#include <ctime>
 #include <filesystem>
 #include <seqan3/alphabet/nucleotide/dna5.hpp>
 #include <seqan3/argument_parser/all.hpp>
@@ -26,6 +27,7 @@ int main(int argc, char const* const* argv) {
     seqan3::sequence_file_input fin{infile};
     seqan3::sequence_file_output fout{std::cout, seqan3::format_fasta{}};
 
+    std::srand(std::time(0));
     // iterate through all sequences in input file
     for (auto & record : fin) {
         std::vector<seqan3::dna5> sequence;
