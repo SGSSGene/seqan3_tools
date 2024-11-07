@@ -78,8 +78,8 @@ These are simple tools to manipulate sequence data.
 
 
 ## Build instructions
-  1. clone this repository: `git clone --recurse-submodules https://github.com/SGSSGene/seqan3_tools`
-  2. create and enter build folder: `mkdir seqan3_tools/build; cd seqan3_tools/build`
-  3. run cmake with release options: `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-mpopcnt -march=native" ..`
+  1. clone this repository: `git clone https://github.com/SGSSGene/seqan3_tools`
+  2. create and enter build folder: `mkdir -p seqan3_tools/build; cd $_`
+  3. run cmake with release options: `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-march=native" ..`
   4. compile with `make`
   5. (optional) put them in your PATH variable `PATH="${PATH}:path/to/seqan3_tools/build/bin"`
