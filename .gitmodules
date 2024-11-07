@@ -1,3 +1,0 @@
-[submodule "lib/seqan3"]
-	path = lib/seqan3
-	url = ../../seqan/seqan3.git
