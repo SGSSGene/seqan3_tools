@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2006-2023, Knut Reinert & Freie Universität Berlin
+# SPDX-FileCopyrightText: 2016-2023, Knut Reinert & MPI für molekulare Genetik
+# SPDX-License-Identifier: CC0-1.0
+
 cmake_minimum_required (VERSION 3.8)
 
 add_subdirectory(oss)
@@ -32,10 +36,9 @@ target_link_libraries (st_scheme_build PRIVATE seqan3::seqan3 generator)
 add_executable (st_scheme_stat st_scheme_stat.cpp)
 target_link_libraries (st_scheme_stat PRIVATE seqan3::seqan3 oss)
 
-if(NOT NODIVSUFSORT)
-    add_executable (st_bwt_build st_bwt_build.cpp)
-    target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)
-endif()
+add_executable (st_bwt_build st_bwt_build.cpp)
+target_link_libraries (st_bwt_build PRIVATE seqan3::seqan3 divsufsort64)
+target_include_directories (st_bwt_build SYSTEM PRIVATE ${libdivsufsort_BINARY_DIR}/include)
 
 add_executable (st_text_map st_text_map.cpp)
 target_link_libraries (st_text_map PRIVATE seqan3::seqan3)
