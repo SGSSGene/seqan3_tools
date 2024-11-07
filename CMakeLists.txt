@@ -16,6 +16,8 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 include(cmake/CPM.cmake)
 CPMAddPackage("gh:seqan/seqan3#4d03890530089b040221876c9e368fc250c4583f")
+set(BUILD_DIVSUFSORT64 ON)
+CPMAddPackage("gh:y-256/libdivsufsort#5f60d6f026c30fb4ac296f696b3c8b0eb71bd428")
 
 # Add the application.
 add_subdirectory (src)
