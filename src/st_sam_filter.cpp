@@ -64,7 +64,7 @@ int main(int argc, char const* const* argv) {
     parser.add_option(error, '\0', "error", "max number of allowed errors");
 
     size_t minErrors = 0;
-    parser.add_option(minErrors, '\0', "minError", "min number of occured errors");
+    parser.add_option(minErrors, '\0', "minError", "min number of occurred errors");
 
     bool noMismatches{false};
     parser.add_flag(noMismatches, '\0', "noMismatches", "filter out all alignments with mismatches");

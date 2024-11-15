@@ -76,7 +76,7 @@ int main(int argc, char const* const* argv) {
     parser.add_positional_option(infile, "Please provide a fasta file.");
 
     bool idToName{false};
-    parser.add_flag(idToName, '\0', "idToName", "reverse convertion, from name to id");
+    parser.add_flag(idToName, '\0', "idToName", "reverse conversion, from name to id");
 
     bool revCompl{false};
     parser.add_flag(revCompl, '\0', "revCompl", "generate additional reverse complements entries with the names _rev, which are interleaved to the original data");

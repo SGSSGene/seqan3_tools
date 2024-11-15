@@ -131,7 +131,7 @@ int main(int argc, char const* const* argv) {
     std::filesystem::path outfile;
 
     parser.add_positional_option(infile, "Please provide a file.");
-    parser.add_positional_option(outfile, "Please provdie a output file.");
+    parser.add_positional_option(outfile, "Please provide an output file.");
 
     parser.add_option(mapping,  'm', "map", "Add a mapping e.g.: \"$ACGT\"");
 
