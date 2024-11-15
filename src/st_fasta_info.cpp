@@ -31,7 +31,7 @@ int main(int argc, char const* const* argv) {
     parser.add_option(qname,   '\0', "qname",     "(view) name of sequence (if this is set, id will be ignored)");
     parser.add_option(pos,     '\0', "start",     "(view) position where to start printing");
     parser.add_option(len,     '\0', "len",       "(view) how many chars to print");
-    parser.add_flag(revCompl,  '\0', "rev-compl", "(view) consider artifical revComple (uneven numbers are artifical)");
+    parser.add_flag(revCompl,  '\0', "rev-compl", "(view) consider artificial revComple (uneven numbers are artificial)");
 
 
     try {

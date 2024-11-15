@@ -108,7 +108,7 @@ int main(int argc, char const* const* argv) {
         }
     };
 
-    // Whats left but not right?
+    // What's left but not right?
     compare(lhs, rhs, '<');
     compare(rhs, lhs, '>');
 

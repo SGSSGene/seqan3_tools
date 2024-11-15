@@ -47,7 +47,7 @@ These are simple tools to manipulate sequence data.
     Converts a fastq file into a fasta file
 
     $ st_dna5todna4 input.fasta > output.fasta
-    Converts a dna5 alphabet to dna4 and replaces every occurence of 'N' with a random 'A', 'C', 'G' or 'T'.
+    Converts a dna5 alphabet to dna4 and replaces every occurrence of 'N' with a random 'A', 'C', 'G' or 'T'.
 
     $ st_index_build -v input.dna5.fasta output.dna5.index
     $ st_index_build --dna4 -v input.dna4.fasta output.dna4.index
