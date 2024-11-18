@@ -38,7 +38,7 @@ jobs:
           - {os: ubuntu-22.04, compiler: clang18-cpp20-release}
     steps:
       - name: Standard IV-project testing
-        uses: iv-project/IVaction@v9.22
+        uses: iv-project/IVaction@v9.24
         with:
           compiler: ${{ matrix.compiler }}
           threads: 2
